@@ -11,11 +11,13 @@ import sys
 import re 
 import urllib 
 import datetime
+import fileinput
 
-infile = open(sys.argv[1],"r")
+#infile = open(sys.argv[1],"r")
+infile = sys.stdin
 my_parser = KafNafParser(infile)
-logfile = open('logfileTC_test.txt', 'a')
-logNIL = open ('logfileNIL.txt', 'a')
+#logfile = open('logfileTC_test.txt', 'a')
+#logNIL = open ('logfileNIL.txt', 'a')
 
 # Gather all words 
 words = {}
@@ -56,7 +58,8 @@ enlightened = {}
 for item in entity_mention:
 	if "NIL" in entity_ref[item]:  
 		darkies[item] = "".join(entity_mention[item])
-		print >>logNIL, sys.argv[1], darkies[item].encode('utf8')
+#		print >>logNIL, sys.argv[1], darkies[item].encode('utf8')
+		print >>sys.stderr, darkies[item].encode('utf8')
 	else:
 		enlightened[item] = "".join(entity_mention[item]) 
 
@@ -80,7 +83,8 @@ for item in darkies.keys():
 			try:
 				new_ext_reference.set_reference(entity_ref[entity])
 				logstring = sys.argv[1] + "\t" + 'DoubleLinkEntities' + "\t" + item + "\t" + darkies[item] + "\t" + entity + "\t" + enlightened[entity] + "\t" + entity_ref[entity]
-				print >>logfile, logstring
+#				print >>logfile, logstring
+				print >>sys.stderr, logstring
 				#print logstring
 				cleanup[item] = darkies[item]
 				new_references[item] = entity_ref[entity]
@@ -138,7 +142,8 @@ for item in darkies.keys():
 			try:
 				new_ext_reference.set_reference(entity_ref[entity])
 				logstring = sys.argv[1] + "\t" + 'DoubleLinkEntitiesTitles' + "\t" + item + "\t" + darkies[item] + "\t" + entity + "\t" + enlightened[entity] + "\t" + entity_ref[entity]
-				print >>logfile, logstring
+#				print >>logfile, logstring
+				print >>sys.stderr, logstring
 			#	print logstring
 				cleanup[item] = darkies[item]
 				new_references[item] = entity_ref[entity]	
@@ -179,7 +184,8 @@ for item in darkies.keys():
 				try:
 					new_ext_reference.set_reference(reference)	
 					logstring = sys.argv[1] + "\t" + 'Darkies' + "\t" + item + "\t" + darkies[item] + "\t" + entity + "\t" + darkies[entity] + "\t" + reference
-					print >>logfile, logstring 
+#					print >>logfile, logstring 
+					print >>sys.stderr, logstring 
 				#	print logstring
 					cleanup[item] = darkies[item]
 					new_references[item] = reference
